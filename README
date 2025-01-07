@@ -3,7 +3,7 @@
 
 
 ```
-sudo apt-get install librdmacm-dev libibumad-dev pciutils-dev libpci-dev -y
+sudo apt-get install librdmacm-dev libibumad-dev libpci-dev -y
 ```
 
 ===============================================================================
