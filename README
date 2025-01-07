@@ -2,6 +2,9 @@
                 	Performance Tests README
 
 
+```
+sudo apt-get install librdmacm-dev libibumad-dev pciutils-dev libpci-dev -y
+```
 
 ===============================================================================
 Table of Contents
