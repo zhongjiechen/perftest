@@ -578,7 +578,8 @@ static void usage(const char *argv0, VerbType verb, TestType tst, int connection
 	if ( tst == BW ) {
 		printf("      --report-both ");
 		printf(" Report RX & TX results separately on Bidirectional BW tests\n");
-
+        printf("      --multi_path ");
+		printf(" Emulate multi path case: only when all QPs are completed, the sender can start the next round\n");
 		printf("      --report_gbits ");
 		printf(" Report Max/Average BW of test in Gbit/sec (instead of MiB/sec)\n");
 		printf("        Note: MiB=2^20 byte, while Gb=10^9 bits. Use these formulas for conversion:\n");
@@ -2387,6 +2388,7 @@ int parser(struct perftest_parameters *user_param,char *argv[], int argc)
 	static int wait_destroy_flag = 0;
 	static int flows_flag = 0;
 	static int flows_burst_flag = 0;
+    static int multi_path_flag = 0;
 	static int force_link_flag = 0;
 	static int source_ip_flag = 0;
 	static int local_ip_flag = 0;
@@ -2500,6 +2502,7 @@ int parser(struct perftest_parameters *user_param,char *argv[], int argc)
 			{ .name = "mac_fwd",		.has_arg = 0, .val = 'v' },
 			{ .name = "use_rss",		.has_arg = 0, .val = 'G' },
 			{ .name = "report-counters",	.has_arg = 1, .val = 'W' },
+            { .name = "multi_path",     .has_arg = 0, .flag = &multi_path_flag, .val = 1},
 			{ .name = "force-link",		.has_arg = 1, .flag = &force_link_flag, .val = 1},
 			{ .name = "remote_mac",		.has_arg = 1, .flag = &remote_mac_flag, .val = 1 },
 			{ .name = "local_mac",		.has_arg = 1, .flag = &local_mac_flag, .val = 1 },
@@ -3298,6 +3301,10 @@ int parser(struct perftest_parameters *user_param,char *argv[], int argc)
 	if (report_fmt_flag) {
 		user_param->report_fmt = GBS;
 	}
+
+    if (multi_path_flag) {
+        user_param->multi_path = 1;
+    }
 
 	if (dont_xchg_versions_flag) {
 		user_param->dont_xchg_versions = 1;

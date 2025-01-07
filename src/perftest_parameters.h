@@ -584,6 +584,7 @@ struct perftest_parameters {
 	enum ctx_test_method 		test_method;
 	enum ibv_transport_type 	transport_type;
 	enum ctx_report_fmt		report_fmt;
+    int                 multi_path;
 	struct report_options  		*r_flag	;
 	int 				mac_fwd;
 	int report_both; /* in bidirectional tests, report tx and rx separately */

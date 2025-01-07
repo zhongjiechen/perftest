@@ -3579,6 +3579,15 @@ int run_iter_bw(struct pingpong_context *ctx,struct perftest_parameters *user_pa
 	/* main loop for posting */
 	while (totscnt < tot_iters  || totccnt < tot_iters ||
 		(user_param->test_type == DURATION && user_param->state != END_STATE) ) {
+        
+        if (user_param->multi_path) {
+            bool pending_comp = false;
+            for (index =0 ; index < num_of_qps ; index++) {
+                if ((ctx->scnt[index] + user_param->post_list) > (user_param->tx_depth + ctx->ccnt[index]))
+                    pending_comp = true;
+            }
+            if (pending_comp) goto completion;
+        }
 
 		/* main loop to run over all the qps and post each time n messages */
 		for (index =0 ; index < num_of_qps ; index++) {
@@ -3663,7 +3672,7 @@ int run_iter_bw(struct pingpong_context *ctx,struct perftest_parameters *user_pa
 				}
 			}
 		}
-
+        completion:
 		if (totccnt < tot_iters || (user_param->test_type == DURATION &&  totccnt < totscnt)) {
 				/* Make sure all completions from previous event were polled before waiting for another */
 				if (user_param->use_event && ne == 0) {
