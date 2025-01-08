@@ -3581,12 +3581,10 @@ int run_iter_bw(struct pingpong_context *ctx,struct perftest_parameters *user_pa
 		(user_param->test_type == DURATION && user_param->state != END_STATE) ) {
         
         if (user_param->multi_path) {
-            bool pending_comp = false;
             for (index =0 ; index < num_of_qps ; index++) {
                 if ((ctx->scnt[index] + user_param->post_list) > (user_param->tx_depth + ctx->ccnt[index]))
-                    pending_comp = true;
+                    goto completion;
             }
-            if (pending_comp) goto completion;
         }
 
 		/* main loop to run over all the qps and post each time n messages */
